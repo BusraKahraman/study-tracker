@@ -25,15 +25,19 @@ export default function Timer({ onSave }) {
 	return (
 		<div>
 			<h2>{formatTime(seconds)}</h2>
-
 			{!running ? (
 				<button onClick={() => setRunning(true)}>Start</button>
 			) : (
 				<button onClick={() => setRunning(false)}>Pause</button>
 			)}
-
 			<button onClick={stopAndSave} disabled={seconds === 0}>
 				Stop & Save
+			</button>
+			<button
+				onClick={() => setSeconds(0)}
+				disabled={seconds === 0 && !running}
+			>
+				Reset
 			</button>
 		</div>
 	);

@@ -15,6 +15,14 @@ export default function Stats({ data }) {
 		<div>
 			<h2>Stats</h2>
 			<p>Total: {formatTime(totalSeconds)}</p>
+			<button
+				onClick={() => {
+					localStorage.removeItem('studyData');
+					window.location.reload();
+				}}
+			>
+				Clear Total
+			</button>
 		</div>
 	);
 }
