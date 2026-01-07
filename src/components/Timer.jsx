@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { formatTime } from '../utils/formatTime';
 
 export default function Timer({ onSave }) {
 	const [seconds, setSeconds] = useState(0);
@@ -16,15 +17,14 @@ export default function Timer({ onSave }) {
 
 	const stopAndSave = () => {
 		setRunning(false);
-		onSave(seconds);
+		const savedSeconds = seconds;
 		setSeconds(0);
+		onSave(savedSeconds);
 	};
 
 	return (
 		<div>
-			<h2>
-				{Math.floor(seconds / 60)}m {seconds % 60}s
-			</h2>
+			<h2>{formatTime(seconds)}</h2>
 
 			{!running ? (
 				<button onClick={() => setRunning(true)}>Start</button>
