@@ -28,13 +28,37 @@ export default function App() {
 		});
 	};
 
+	const handleDeleteDay = (date) => {
+		setStudyData((prev) => {
+			const updated = { ...prev };
+			delete updated[date];
+			localStorage.setItem('studyData', JSON.stringify(updated));
+			return updated;
+		});
+	};
+
+	const handleEditDay = (date, newSeconds) => {
+		setStudyData((prev) => {
+			const updated = {
+				...prev,
+				[date]: newSeconds,
+			};
+			localStorage.setItem('studyData', JSON.stringify(updated));
+			return updated;
+		});
+	};
+
 	return (
 		<div>
 			<h1>Study Tracker</h1>
 
 			<Timer onSave={handleSave} />
 			<Stats data={studyData} />
-			<History data={studyData} />
+			<History
+				data={studyData}
+				onDeleteDay={handleDeleteDay}
+				onEditDay={handleEditDay}
+			/>
 		</div>
 	);
 }
