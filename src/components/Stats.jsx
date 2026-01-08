@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatTime } from '../utils/formatTime';
+import { formatTime } from '../utils/time';
 import { isToday, isThisWeek, isThisMonth, isThisYear } from '../utils/date';
 
 export default function Stats({ data }) {

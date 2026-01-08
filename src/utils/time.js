@@ -6,3 +6,12 @@ export function formatTime(seconds) {
 
 	return `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
 }
+
+export function timeToSeconds(value) {
+	const [h, m, s] = value.split(':').map(Number);
+	return h * 3600 + m * 60 + s;
+}
+
+export function isValidTime(value) {
+	return /^(\d+):([0-5]\d):([0-5]\d)$/.test(value);
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { formatTime } from '../utils/formatTime';
+import { formatTime } from '../utils/time';
 
 export default function Timer({ onSave }) {
 	const [seconds, setSeconds] = useState(0);

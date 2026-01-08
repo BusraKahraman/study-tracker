@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { formatTime } from '../utils/formatTime';
-import { timeToSeconds } from '../utils/timeToSeconds';
-import { isValidTime } from '../utils/timeValidation';
+import { formatTime, timeToSeconds, isValidTime } from '../utils/time';
 
 const DEFAULT_VISIBLE_DAYS = 5;
 
