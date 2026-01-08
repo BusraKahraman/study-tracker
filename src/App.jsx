@@ -48,6 +48,18 @@ export default function App() {
 		});
 	};
 
+	const handleAddDay = (date, seconds) => {
+		setStudyData((prev) => {
+			const updated = {
+				...prev,
+				[date]: (prev[date] || 0) + seconds,
+			};
+
+			localStorage.setItem('studyData', JSON.stringify(updated));
+			return updated;
+		});
+	};
+
 	return (
 		<div>
 			<h1>Study Tracker</h1>
@@ -58,6 +70,7 @@ export default function App() {
 				data={studyData}
 				onDeleteDay={handleDeleteDay}
 				onEditDay={handleEditDay}
+				onAddDay={handleAddDay}
 			/>
 		</div>
 	);
