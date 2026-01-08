@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Timer from './components/Timer';
 import Stats from './components/Stats';
+import History from './components/History';
 import { getTodayKey } from './utils/date';
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
 
 			<Timer onSave={handleSave} />
 			<Stats data={studyData} />
+			<History data={studyData} />
 		</div>
 	);
 }
