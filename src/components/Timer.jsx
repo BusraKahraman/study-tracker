@@ -1,17 +1,16 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect } from 'react';
 import { formatTime } from '../utils/time';
 import { getTodayKey } from '../utils/date';
 
-export default function Timer({ onSave }) {
-	const [isRunning, setIsRunning] = useState(false);
-	const [elapsedSeconds, setElapsedSeconds] = useState(0);
-	const startTimeRef = useRef(null);
-	const intervalRef = useRef(null);
-
+export default function Timer({
+	seconds,
+	setSeconds,
+	isRunning,
+	setIsRunning,
+	onSave,
+}) {
 	const start = () => {
 		if (isRunning) return;
-
-		startTimeRef.current = Date.now() - elapsedSeconds * 1000;
 		setIsRunning(true);
 	};
 
@@ -21,35 +20,28 @@ export default function Timer({ onSave }) {
 
 	const reset = () => {
 		setIsRunning(false);
-		setElapsedSeconds(0);
-		startTimeRef.current = null;
+		setSeconds(0);
 	};
 
 	const save = () => {
-		if (elapsedSeconds === 0) return;
-		onSave(getTodayKey(), elapsedSeconds);
+		if (seconds === 0) return;
+		onSave(getTodayKey(), seconds);
 		reset();
 	};
 
 	useEffect(() => {
-		if (!isRunning) {
-			clearInterval(intervalRef.current);
-			return;
-		}
+		if (!isRunning) return;
 
-		intervalRef.current = setInterval(() => {
-			const seconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
-			setElapsedSeconds(seconds);
+		const interval = setInterval(() => {
+			setSeconds((prev) => prev + 1);
 		}, 1000);
 
-		return () => clearInterval(intervalRef.current);
-	}, [isRunning]);
+		return () => clearInterval(interval);
+	}, [isRunning, setSeconds]);
 
 	return (
 		<div>
-			<h2>Timer</h2>
-
-			<div style={{ fontSize: '2rem' }}>{formatTime(elapsedSeconds)}</div>
+			<div style={{ fontSize: '2rem' }}>{formatTime(seconds)}</div>
 
 			<div style={{ marginTop: '10px' }}>
 				{!isRunning ? (
@@ -64,14 +56,14 @@ export default function Timer({ onSave }) {
 				<button
 					style={{ marginRight: '6px' }}
 					onClick={reset}
-					disabled={elapsedSeconds === 0}
+					disabled={seconds === 0}
 				>
 					Reset
 				</button>
 				<button
 					style={{ marginRight: '6px' }}
 					onClick={save}
-					disabled={elapsedSeconds === 0}
+					disabled={seconds === 0}
 				>
 					Save
 				</button>

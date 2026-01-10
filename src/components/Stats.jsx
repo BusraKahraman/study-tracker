@@ -78,7 +78,6 @@ export default function Stats({ data }) {
 
 	return (
 		<div>
-			<h2>Stats</h2>
 			{/* Tabs */}
 			<div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
 				<button onClick={() => setActiveTab('today')}>Today</button>

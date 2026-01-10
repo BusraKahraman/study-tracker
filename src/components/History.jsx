@@ -53,8 +53,6 @@ export default function History({ data, onDeleteDay, onEditDay, onAddDay }) {
 
 	return (
 		<div>
-			<h2>History</h2>
-
 			<div style={{ marginBottom: '12px' }}>
 				<input
 					type='date'
