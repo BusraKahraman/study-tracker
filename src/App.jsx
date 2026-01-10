@@ -27,6 +27,13 @@ export default function App() {
 		return saved ? Number(saved) : 0;
 	});
 
+	const [currentDay, setCurrentDay] = useState(() => {
+		return (
+			localStorage.getItem('currentDay') ||
+			new Date().toISOString().slice(0, 10)
+		);
+	});
+
 	useEffect(() => {
 		localStorage.setItem('timerSeconds', timerSeconds);
 	}, [timerSeconds]);
@@ -46,6 +53,34 @@ export default function App() {
 	useEffect(() => {
 		localStorage.setItem('isRunning', isRunning);
 	}, [isRunning]);
+
+	useEffect(() => {
+		localStorage.setItem('currentDay', currentDay);
+	}, [currentDay]);
+
+	useEffect(() => {
+		if (!isRunning || !startTimestamp) return;
+
+		const interval = setInterval(() => {
+			const today = new Date().toISOString().slice(0, 10);
+
+			if (today !== currentDay) {
+				const now = Date.now();
+				const elapsed = baseSeconds + Math.floor((now - startTimestamp) / 1000);
+
+				// save yesterday
+				addDay(currentDay, elapsed);
+
+				// reset for today
+				setBaseSeconds(0);
+				setTimerSeconds(0);
+				setStartTimestamp(now);
+				setCurrentDay(today);
+			}
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, [isRunning, startTimestamp, baseSeconds, currentDay, addDay]);
 
 	return (
 		<>
