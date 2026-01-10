@@ -7,13 +7,19 @@ import {
 	Tooltip,
 	ResponsiveContainer,
 } from 'recharts';
-import { formatTime } from '../utils/time';
-import { isToday, isThisWeek, isThisMonth, isThisYear } from '../utils/date';
+import { formatTime, formatTooltipTime, formatDateLabel } from '../utils/time';
+import {
+	isToday,
+	isThisWeek,
+	isThisMonth,
+	isThisYear,
+	sortDatesAsc,
+} from '../utils/date';
 
 export default function Stats({ data }) {
 	const [activeTab, setActiveTab] = React.useState('today');
 
-	const entries = Object.entries(data);
+	const entries = sortDatesAsc(Object.entries(data));
 
 	let today = 0;
 	let week = 0;
@@ -37,16 +43,20 @@ export default function Stats({ data }) {
 	const weeklyChartData = entries
 		.filter(([date]) => isThisWeek(date))
 		.map(([date, seconds]) => ({
-			label: date,
+			date,
+			label: formatDateLabel(date),
 			hours: +(seconds / 3600).toFixed(2),
-		}));
+		}))
+		.sort(sortDatesAsc);
 
 	const monthlyChartData = entries
 		.filter(([date]) => isThisMonth(date))
 		.map(([date, seconds]) => ({
-			label: date,
+			date,
+			label: formatDateLabel(date),
 			hours: +(seconds / 3600).toFixed(2),
-		}));
+		}))
+		.sort(sortDatesAsc);
 
 	const yearlyChartData = Array.from({ length: 12 }, (_, month) => {
 		const total = entries.reduce((sum, [date, seconds]) => {
@@ -84,10 +94,24 @@ export default function Stats({ data }) {
 				<div style={{ width: '100%', height: 250, marginTop: '20px' }}>
 					<ResponsiveContainer>
 						<LineChart data={chartData}>
-							<XAxis dataKey='label' />
-							<YAxis />
-							<Tooltip />
-							<Line type='monotone' dataKey='hours' />
+							<XAxis
+								dataKey='label'
+								interval={0}
+								angle={-45}
+								textAnchor='end'
+								height={60}
+							/>
+
+							<YAxis
+								domain={[0, 'auto']}
+								tickFormatter={(value) => `${value}h`}
+							/>
+
+							<Tooltip
+								formatter={(value) => formatTooltipTime(value)}
+								labelFormatter={(label) => `Date: ${label}`}
+							/>
+							<Line type='linear' dataKey='hours' dot={{ r: 3 }} />
 						</LineChart>
 					</ResponsiveContainer>
 				</div>

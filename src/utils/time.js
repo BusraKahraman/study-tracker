@@ -15,3 +15,16 @@ export function timeToSeconds(value) {
 export function isValidTime(value) {
 	return /^(\d+):([0-5]\d):([0-5]\d)$/.test(value);
 }
+
+export function formatTooltipTime(hours) {
+	const totalSeconds = Math.round(hours * 3600);
+	return formatTime(totalSeconds);
+}
+
+export function formatDateLabel(dateStr) {
+	const d = new Date(dateStr);
+	return d.toLocaleDateString('en', {
+		month: 'short',
+		day: 'numeric',
+	});
+}

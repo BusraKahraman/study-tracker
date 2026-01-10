@@ -37,3 +37,8 @@ export function isThisYear(dateStr) {
 export function sortDatesDesc(entries) {
 	return [...entries].sort((a, b) => new Date(b[0]) - new Date(a[0]));
 }
+
+export function sortDatesAsc(entries = []) {
+	if (!Array.isArray(entries)) return [];
+	return [...entries].sort((a, b) => new Date(a[0]) - new Date(b[0]));
+}
