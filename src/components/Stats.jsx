@@ -77,7 +77,12 @@ export default function Stats({ data }) {
 	if (activeTab === 'year') chartData = yearlyChartData;
 
 	return (
-		<div>
+		<div
+			style={{
+				maxWidth: '900px',
+				margin: '0 auto',
+			}}
+		>
 			{/* Tabs */}
 			<div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
 				<button onClick={() => setActiveTab('today')}>Today</button>

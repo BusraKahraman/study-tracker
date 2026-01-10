@@ -90,23 +90,30 @@ export default function App() {
 				flexDirection: 'column',
 			}}
 		>
-			<>
-				<nav
-					style={{
-						display: 'flex',
-						gap: '16px',
-						padding: '12px 16px',
-						borderBottom: '1px solid #ddd',
-						position: 'sticky',
-						top: 0,
-						zIndex: 10,
-					}}
-				>
-					<button onClick={() => setActiveTab('timer')}>Timer</button>
-					<button onClick={() => setActiveTab('stats')}>Stats</button>
-					<button onClick={() => setActiveTab('history')}>History</button>
-				</nav>
+			<nav
+				style={{
+					display: 'flex',
+					gap: '16px',
+					padding: '12px 16px',
+					borderBottom: '1px solid #ddd',
+					position: 'sticky',
+					top: 0,
+					zIndex: 10,
+				}}
+			>
+				<button onClick={() => setActiveTab('timer')}>Timer</button>
+				<button onClick={() => setActiveTab('stats')}>Stats</button>
+				<button onClick={() => setActiveTab('history')}>History</button>
+			</nav>
 
+			<div
+				style={{
+					flex: 1,
+					padding: '24px',
+					boxSizing: 'border-box',
+					display: 'flex',
+				}}
+			>
 				{activeTab === 'timer' && (
 					<div
 						style={{
@@ -140,7 +147,7 @@ export default function App() {
 						onDeleteDay={deleteDay}
 					/>
 				)}
-			</>
+			</div>
 		</div>
 	);
 }
