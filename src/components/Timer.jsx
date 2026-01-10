@@ -58,30 +58,27 @@ export default function Timer({
 
 	return (
 		<div>
-			<div style={{ fontSize: '2rem' }}>{formatTime(seconds)}</div>
+			<div
+				style={{
+					fontSize: '6rem',
+					fontWeight: '600',
+					textAlign: 'center',
+					marginBottom: '24px',
+				}}
+			>
+				{formatTime(seconds)}
+			</div>
 
-			<div style={{ marginTop: '10px' }}>
+			<div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
 				{!isRunning ? (
-					<button style={{ marginRight: '6px' }} onClick={start}>
-						Start
-					</button>
+					<button onClick={start}>Start</button>
 				) : (
-					<button style={{ marginRight: '6px' }} onClick={pause}>
-						Pause
-					</button>
+					<button onClick={pause}>Pause</button>
 				)}
-				<button
-					style={{ marginRight: '6px' }}
-					onClick={reset}
-					disabled={seconds === 0}
-				>
+				<button onClick={reset} disabled={seconds === 0}>
 					Reset
 				</button>
-				<button
-					style={{ marginRight: '6px' }}
-					onClick={save}
-					disabled={seconds === 0}
-				>
+				<button onClick={save} disabled={seconds === 0}>
 					Save
 				</button>
 			</div>

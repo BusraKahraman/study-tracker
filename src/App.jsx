@@ -83,45 +83,64 @@ export default function App() {
 	}, [isRunning, startTimestamp, baseSeconds, currentDay, addDay]);
 
 	return (
-		<>
-			<nav
-				style={{
-					display: 'flex',
-					gap: '16px',
-					padding: '12px 16px',
-					borderBottom: '1px solid #ddd',
-					marginBottom: '24px',
-				}}
-			>
-				<button onClick={() => setActiveTab('timer')}>Timer</button>
-				<button onClick={() => setActiveTab('stats')}>Stats</button>
-				<button onClick={() => setActiveTab('history')}>History</button>
-			</nav>
+		<div
+			style={{
+				minHeight: '100vh',
+				display: 'flex',
+				flexDirection: 'column',
+			}}
+		>
+			<>
+				<nav
+					style={{
+						display: 'flex',
+						gap: '16px',
+						padding: '12px 16px',
+						borderBottom: '1px solid #ddd',
+						position: 'sticky',
+						top: 0,
+						zIndex: 10,
+					}}
+				>
+					<button onClick={() => setActiveTab('timer')}>Timer</button>
+					<button onClick={() => setActiveTab('stats')}>Stats</button>
+					<button onClick={() => setActiveTab('history')}>History</button>
+				</nav>
 
-			{activeTab === 'timer' && (
-				<Timer
-					seconds={timerSeconds}
-					setSeconds={setTimerSeconds}
-					baseSeconds={baseSeconds}
-					setBaseSeconds={setBaseSeconds}
-					isRunning={isRunning}
-					setIsRunning={setIsRunning}
-					startTimestamp={startTimestamp}
-					setStartTimestamp={setStartTimestamp}
-					onSave={addDay}
-				/>
-			)}
+				{activeTab === 'timer' && (
+					<div
+						style={{
+							flex: 1,
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Timer
+							seconds={timerSeconds}
+							setSeconds={setTimerSeconds}
+							baseSeconds={baseSeconds}
+							setBaseSeconds={setBaseSeconds}
+							isRunning={isRunning}
+							setIsRunning={setIsRunning}
+							startTimestamp={startTimestamp}
+							setStartTimestamp={setStartTimestamp}
+							onSave={addDay}
+						/>
+					</div>
+				)}
 
-			{activeTab === 'stats' && <Stats data={studyData} />}
+				{activeTab === 'stats' && <Stats data={studyData} />}
 
-			{activeTab === 'history' && (
-				<History
-					data={studyData}
-					onAddDay={addDay}
-					onEditDay={editDay}
-					onDeleteDay={deleteDay}
-				/>
-			)}
-		</>
+				{activeTab === 'history' && (
+					<History
+						data={studyData}
+						onAddDay={addDay}
+						onEditDay={editDay}
+						onDeleteDay={deleteDay}
+					/>
+				)}
+			</>
+		</div>
 	);
 }
