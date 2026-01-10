@@ -1,44 +1,81 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { formatTime } from '../utils/time';
+import { getTodayKey } from '../utils/date';
 
 export default function Timer({ onSave }) {
-	const [seconds, setSeconds] = useState(0);
-	const [running, setRunning] = useState(false);
+	const [isRunning, setIsRunning] = useState(false);
+	const [elapsedSeconds, setElapsedSeconds] = useState(0);
+	const startTimeRef = useRef(null);
+	const intervalRef = useRef(null);
+
+	const start = () => {
+		if (isRunning) return;
+
+		startTimeRef.current = Date.now() - elapsedSeconds * 1000;
+		setIsRunning(true);
+	};
+
+	const pause = () => {
+		setIsRunning(false);
+	};
+
+	const reset = () => {
+		setIsRunning(false);
+		setElapsedSeconds(0);
+		startTimeRef.current = null;
+	};
+
+	const save = () => {
+		if (elapsedSeconds === 0) return;
+		onSave(getTodayKey(), elapsedSeconds);
+		reset();
+	};
 
 	useEffect(() => {
-		if (!running) return;
+		if (!isRunning) {
+			clearInterval(intervalRef.current);
+			return;
+		}
 
-		const interval = setInterval(() => {
-			setSeconds((s) => s + 1);
+		intervalRef.current = setInterval(() => {
+			const seconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
+			setElapsedSeconds(seconds);
 		}, 1000);
 
-		return () => clearInterval(interval);
-	}, [running]);
-
-	const stopAndSave = () => {
-		setRunning(false);
-		const savedSeconds = seconds;
-		setSeconds(0);
-		onSave(savedSeconds);
-	};
+		return () => clearInterval(intervalRef.current);
+	}, [isRunning]);
 
 	return (
 		<div>
-			<h2>{formatTime(seconds)}</h2>
-			{!running ? (
-				<button onClick={() => setRunning(true)}>Start</button>
-			) : (
-				<button onClick={() => setRunning(false)}>Pause</button>
-			)}
-			<button onClick={stopAndSave} disabled={seconds === 0}>
-				Stop & Save
-			</button>
-			<button
-				onClick={() => setSeconds(0)}
-				disabled={seconds === 0 && !running}
-			>
-				Reset
-			</button>
+			<h2>Timer</h2>
+
+			<div style={{ fontSize: '2rem' }}>{formatTime(elapsedSeconds)}</div>
+
+			<div style={{ marginTop: '10px' }}>
+				{!isRunning ? (
+					<button style={{ marginRight: '6px' }} onClick={start}>
+						Start
+					</button>
+				) : (
+					<button style={{ marginRight: '6px' }} onClick={pause}>
+						Pause
+					</button>
+				)}
+				<button
+					style={{ marginRight: '6px' }}
+					onClick={reset}
+					disabled={elapsedSeconds === 0}
+				>
+					Reset
+				</button>
+				<button
+					style={{ marginRight: '6px' }}
+					onClick={save}
+					disabled={elapsedSeconds === 0}
+				>
+					Save
+				</button>
+			</div>
 		</div>
 	);
 }

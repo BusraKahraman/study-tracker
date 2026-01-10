@@ -33,3 +33,7 @@ export function isThisYear(dateStr) {
 
 	return date.getFullYear() === now.getFullYear();
 }
+
+export function sortDatesDesc(entries) {
+	return [...entries].sort((a, b) => new Date(b[0]) - new Date(a[0]));
+}

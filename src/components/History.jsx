@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { formatTime, timeToSeconds, isValidTime } from '../utils/time';
+import { sortDatesDesc } from '../utils/date';
 
 const DEFAULT_VISIBLE_DAYS = 5;
 
@@ -12,9 +13,7 @@ export default function History({ data, onDeleteDay, onEditDay, onAddDay }) {
 	const [newDate, setNewDate] = useState('');
 	const [newTime, setNewTime] = useState('00:00:00');
 
-	const entries = Object.entries(data).sort(
-		(a, b) => new Date(b[0]) - new Date(a[0])
-	); // newest first
+	const entries = sortDatesDesc(Object.entries(data));
 
 	const visibleEntries = showAll
 		? entries
