@@ -40,6 +40,8 @@ export default function Timer({
 	const save = () => {
 		if (seconds === 0) return;
 		onSave(getTodayKey(), seconds);
+		localStorage.removeItem('startTimestamp');
+		localStorage.setItem('baseSeconds', 0);
 		reset();
 	};
 

@@ -12,13 +12,40 @@ export default function App() {
 		return saved ? Number(saved) : 0;
 	});
 
-	const [isRunning, setIsRunning] = useState(false);
-	const [startTimestamp, setStartTimestamp] = useState(null);
-	const [baseSeconds, setBaseSeconds] = useState(0);
+	const [isRunning, setIsRunning] = useState(() => {
+		const saved = localStorage.getItem('isRunning');
+		return saved === 'true';
+	});
+
+	const [startTimestamp, setStartTimestamp] = useState(() => {
+		const saved = localStorage.getItem('startTimestamp');
+		return saved ? Number(saved) : null;
+	});
+
+	const [baseSeconds, setBaseSeconds] = useState(() => {
+		const saved = localStorage.getItem('baseSeconds');
+		return saved ? Number(saved) : 0;
+	});
 
 	useEffect(() => {
 		localStorage.setItem('timerSeconds', timerSeconds);
 	}, [timerSeconds]);
+
+	useEffect(() => {
+		localStorage.setItem('baseSeconds', baseSeconds);
+	}, [baseSeconds]);
+
+	useEffect(() => {
+		if (startTimestamp) {
+			localStorage.setItem('startTimestamp', startTimestamp);
+		} else {
+			localStorage.removeItem('startTimestamp');
+		}
+	}, [startTimestamp]);
+
+	useEffect(() => {
+		localStorage.setItem('isRunning', isRunning);
+	}, [isRunning]);
 
 	return (
 		<>
