@@ -13,6 +13,8 @@ export default function App() {
 	});
 
 	const [isRunning, setIsRunning] = useState(false);
+	const [startTimestamp, setStartTimestamp] = useState(null);
+	const [baseSeconds, setBaseSeconds] = useState(0);
 
 	useEffect(() => {
 		localStorage.setItem('timerSeconds', timerSeconds);
@@ -38,8 +40,12 @@ export default function App() {
 				<Timer
 					seconds={timerSeconds}
 					setSeconds={setTimerSeconds}
+					baseSeconds={baseSeconds}
+					setBaseSeconds={setBaseSeconds}
 					isRunning={isRunning}
 					setIsRunning={setIsRunning}
+					startTimestamp={startTimestamp}
+					setStartTimestamp={setStartTimestamp}
 					onSave={addDay}
 				/>
 			)}

@@ -7,20 +7,34 @@ export default function Timer({
 	setSeconds,
 	isRunning,
 	setIsRunning,
+	startTimestamp,
+	setStartTimestamp,
+	baseSeconds,
+	setBaseSeconds,
 	onSave,
 }) {
 	const start = () => {
 		if (isRunning) return;
+
+		setBaseSeconds(seconds);
+		setStartTimestamp(Date.now());
 		setIsRunning(true);
 	};
 
 	const pause = () => {
+		if (!isRunning) return;
+
+		const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
+
+		setSeconds(baseSeconds + elapsed);
+		setStartTimestamp(null);
 		setIsRunning(false);
 	};
 
 	const reset = () => {
 		setIsRunning(false);
 		setSeconds(0);
+		setStartTimestamp(null);
 	};
 
 	const save = () => {
@@ -30,14 +44,15 @@ export default function Timer({
 	};
 
 	useEffect(() => {
-		if (!isRunning) return;
+		if (!isRunning || !startTimestamp) return;
 
 		const interval = setInterval(() => {
-			setSeconds((prev) => prev + 1);
+			const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
+			setSeconds(baseSeconds + elapsed);
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [isRunning, setSeconds]);
+	}, [isRunning, startTimestamp, baseSeconds]);
 
 	return (
 		<div>
