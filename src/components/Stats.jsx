@@ -15,6 +15,7 @@ import {
 	isThisYear,
 	sortDatesAsc,
 } from '../utils/date';
+import Heatmap from './Heatmap';
 
 export default function Stats({ data }) {
 	const [activeTab, setActiveTab] = React.useState('today');
@@ -120,6 +121,7 @@ export default function Stats({ data }) {
 					</ResponsiveContainer>
 				</div>
 			)}
+			<Heatmap data={data} />
 		</div>
 	);
 }
