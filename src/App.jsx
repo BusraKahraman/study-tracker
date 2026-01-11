@@ -3,6 +3,7 @@ import Stats from './components/Stats';
 import History from './components/History';
 import useStudyData from './hooks/useStudyData';
 import { useEffect, useState } from 'react';
+import { getStreakInfo } from './utils/date';
 
 export default function App() {
 	const { studyData, addDay, editDay, deleteDay } = useStudyData();
@@ -33,6 +34,8 @@ export default function App() {
 			new Date().toISOString().slice(0, 10)
 		);
 	});
+
+	const streaks = getStreakInfo(Object.entries(studyData));
 
 	useEffect(() => {
 		localStorage.setItem('timerSeconds', timerSeconds);
@@ -133,6 +136,7 @@ export default function App() {
 							startTimestamp={startTimestamp}
 							setStartTimestamp={setStartTimestamp}
 							onSave={addDay}
+							streaks={streaks}
 						/>
 					</div>
 				)}

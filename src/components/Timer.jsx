@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { formatTime } from '../utils/time';
 import { getTodayKey } from '../utils/date';
+import StreakFooter from './StreakFooter';
 
 export default function Timer({
 	seconds,
@@ -12,6 +13,7 @@ export default function Timer({
 	baseSeconds,
 	setBaseSeconds,
 	onSave,
+	streaks,
 }) {
 	const start = () => {
 		if (isRunning) return;
@@ -57,7 +59,13 @@ export default function Timer({
 	}, [isRunning, startTimestamp, baseSeconds]);
 
 	return (
-		<div>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				minHeight: '360px',
+			}}
+		>
 			<div
 				style={{
 					fontSize: '6rem',
@@ -82,6 +90,7 @@ export default function Timer({
 					Save
 				</button>
 			</div>
+			<StreakFooter streaks={streaks} />
 		</div>
 	);
 }
