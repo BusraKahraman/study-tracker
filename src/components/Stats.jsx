@@ -102,7 +102,7 @@ export default function Stats({ data }) {
 			</p>
 			{activeTab !== 'today' && chartData.length > 0 && (
 				<div style={{ width: '100%', height: 250, marginTop: '20px' }}>
-					<ResponsiveContainer>
+					<ResponsiveContainer width='100%' height={250}>
 						<LineChart data={chartData}>
 							<XAxis
 								dataKey='label'
