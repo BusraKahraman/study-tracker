@@ -41,7 +41,7 @@ export default function History({ data, onDeleteDay, onEditDay, onAddDay }) {
 			return;
 		}
 
-		onAddDay(newDate, timeToSeconds(newTime));
+		onAddDay(newDate, timeToSeconds(newTime), 'manual');
 		setNewDate('');
 		setNewTime('00:00:00');
 		setError('');
@@ -74,38 +74,47 @@ export default function History({ data, onDeleteDay, onEditDay, onAddDay }) {
 			{error && <p style={{ color: 'red' }}>{error}</p>}
 
 			<ul style={{ listStyle: 'none', padding: 0 }}>
-				{visibleEntries.map(([date, seconds]) => (
-					<li
-						key={date}
-						style={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							padding: '6px 0',
-							borderBottom: '1px solid #ddd',
-							gap: '8px',
-						}}
-					>
-						<span>{date}</span>
+				{visibleEntries.map(([date, sessions]) => {
+					const totalSeconds = Object.values(sessions || {}).reduce(
+						(sum, s) => sum + s,
+						0
+					);
 
-						{editingDate === date ? (
-							<>
-								<input
-									value={editValue}
-									onChange={(e) => setEditValue(e.target.value)}
-									placeholder='HH:MM:SS'
-								/>
-								<button onClick={() => saveEdit(date)}>Save</button>
-								<button onClick={() => setEditingDate(null)}>Cancel</button>
-							</>
-						) : (
-							<>
-								<strong>{formatTime(seconds)}</strong>
-								<button onClick={() => startEdit(date, seconds)}>Edit</button>
-								<button onClick={() => onDeleteDay(date)}>Delete</button>
-							</>
-						)}
-					</li>
-				))}
+					return (
+						<li
+							key={date}
+							style={{
+								display: 'flex',
+								justifyContent: 'space-between',
+								padding: '6px 0',
+								borderBottom: '1px solid #ddd',
+								gap: '8px',
+							}}
+						>
+							<span>{date}</span>
+
+							{editingDate === date ? (
+								<>
+									<input
+										value={editValue}
+										onChange={(e) => setEditValue(e.target.value)}
+										placeholder='HH:MM:SS'
+									/>
+									<button onClick={() => saveEdit(date)}>Save</button>
+									<button onClick={() => setEditingDate(null)}>Cancel</button>
+								</>
+							) : (
+								<>
+									<strong>{formatTime(totalSeconds)}</strong>
+									<button onClick={() => startEdit(date, totalSeconds)}>
+										Edit
+									</button>
+									<button onClick={() => onDeleteDay(date)}>Delete</button>
+								</>
+							)}
+						</li>
+					);
+				})}
 			</ul>
 			{entries.length > DEFAULT_VISIBLE_DAYS && (
 				<button
