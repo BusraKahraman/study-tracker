@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { formatTime } from '../utils/time';
 import { getTodayKey } from '../utils/date';
 import StreakFooter from './StreakFooter';
@@ -14,7 +14,12 @@ export default function Timer({
 	setBaseSeconds,
 	onSave,
 	streaks,
+	sessions,
 }) {
+	const [sessionType, setSessionType] = useState(sessions[0] || '');
+	const [isAddingSession, setIsAddingSession] = useState(false);
+	const [newSession, setNewSession] = useState('');
+
 	const start = () => {
 		if (isRunning) return;
 
@@ -40,8 +45,8 @@ export default function Timer({
 	};
 
 	const save = () => {
-		if (seconds === 0) return;
-		onSave(getTodayKey(), seconds);
+		if (seconds === 0 || !sessionType) return;
+		onSave(getTodayKey(), seconds, sessionType);
 		localStorage.removeItem('startTimestamp');
 		localStorage.setItem('baseSeconds', 0);
 		reset();
@@ -66,6 +71,46 @@ export default function Timer({
 				minHeight: '360px',
 			}}
 		>
+			<div style={{ marginBottom: '16px' }}>
+				{!isAddingSession ? (
+					<div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+						<select
+							value={sessionType}
+							onChange={(e) => setSessionType(e.target.value)}
+						>
+							{sessions.map((s) => (
+								<option key={s} value={s}>
+									{s}
+								</option>
+							))}
+						</select>
+
+						<button onClick={() => setIsAddingSession(true)}>+ Add</button>
+					</div>
+				) : (
+					<div style={{ display: 'flex', gap: '8px' }}>
+						<input
+							value={newSession}
+							onChange={(e) => setNewSession(e.target.value)}
+							placeholder='Session name'
+						/>
+						<button
+							onClick={() => {
+								const name = newSession.trim().toLowerCase();
+								if (!name) return;
+								onAddSession(name);
+								setSessionType(name);
+								setNewSession('');
+								setIsAddingSession(false);
+							}}
+						>
+							Save
+						</button>
+						<button onClick={() => setIsAddingSession(false)}>Cancel</button>
+					</div>
+				)}
+			</div>
+
 			<div
 				style={{
 					fontSize: '6rem',

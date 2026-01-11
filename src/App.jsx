@@ -4,6 +4,7 @@ import History from './components/History';
 import useStudyData from './hooks/useStudyData';
 import { useEffect, useState } from 'react';
 import { getStreakInfo } from './utils/date';
+import useSessions from './hooks/useSessions';
 
 export default function App() {
 	const { studyData, addDay, editDay, deleteDay } = useStudyData();
@@ -35,7 +36,14 @@ export default function App() {
 		);
 	});
 
-	const streaks = getStreakInfo(Object.entries(studyData));
+	const { sessions, addSession, deleteSession } = useSessions();
+
+	const streaks = getStreakInfo(
+		Object.entries(studyData).map(([date, sessions]) => [
+			date,
+			Object.values(sessions).reduce((a, b) => a + b, 0),
+		])
+	);
 
 	useEffect(() => {
 		localStorage.setItem('timerSeconds', timerSeconds);
@@ -72,7 +80,7 @@ export default function App() {
 				const elapsed = baseSeconds + Math.floor((now - startTimestamp) / 1000);
 
 				// save yesterday
-				addDay(currentDay, elapsed);
+				addDay(currentDay, elapsed, 'auto');
 
 				// reset for today
 				setBaseSeconds(0);
@@ -137,6 +145,9 @@ export default function App() {
 							setStartTimestamp={setStartTimestamp}
 							onSave={addDay}
 							streaks={streaks}
+							sessions={sessions}
+							onAdd={addSession}
+							onDelete={deleteSession}
 						/>
 					</div>
 				)}

@@ -24,7 +24,9 @@ export default function Heatmap({ data }) {
 		const key = date.toISOString().slice(0, 10);
 		return {
 			key,
-			seconds: data[key] || 0,
+			seconds: data[key]
+				? Object.values(data[key]).reduce((a, b) => a + b, 0)
+				: 0,
 		};
 	});
 

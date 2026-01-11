@@ -1,34 +1,43 @@
-import { useEffect, useState } from 'react';
+import useLocalStorage from './useLocalStorage';
 
 export default function useStudyData() {
-	const [studyData, setStudyData] = useState({});
+	const [studyData, setStudyData] = useLocalStorage('studyData', {});
+	const [sessions, setSessions] = useLocalStorage('sessions', ['general']);
 
-	useEffect(() => {
-		const stored = localStorage.getItem('studyData');
-		if (stored) setStudyData(JSON.parse(stored));
-	}, []);
-
-	const persist = (data) => {
-		localStorage.setItem('studyData', JSON.stringify(data));
-		setStudyData(data);
+	const addSession = (session) => {
+		setSessions((prev) => (prev.includes(session) ? prev : [...prev, session]));
 	};
 
-	const addDay = (date, seconds) => {
-		persist({
-			...studyData,
-			[date]: (studyData[date] || 0) + seconds,
+	const addDay = (date, seconds, session) => {
+		if (!session || typeof seconds !== 'number') return;
+
+		addSession(session);
+
+		setStudyData((prev) => {
+			const day = prev[date] || {};
+			return {
+				...prev,
+				[date]: {
+					...day,
+					[session]: (day[session] || 0) + seconds,
+				},
+			};
 		});
 	};
 
-	const editDay = (date, seconds) => {
-		persist({ ...studyData, [date]: seconds });
-	};
-
 	const deleteDay = (date) => {
-		const updated = { ...studyData };
-		delete updated[date];
-		persist(updated);
+		setStudyData((prev) => {
+			const copy = { ...prev };
+			delete copy[date];
+			return copy;
+		});
 	};
 
-	return { studyData, addDay, editDay, deleteDay };
+	return {
+		studyData,
+		sessions,
+		addSession,
+		addDay,
+		deleteDay,
+	};
 }

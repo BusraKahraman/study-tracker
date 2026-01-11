@@ -20,7 +20,12 @@ import Heatmap from './Heatmap';
 export default function Stats({ data }) {
 	const [activeTab, setActiveTab] = React.useState('today');
 
-	const entries = sortDatesAsc(Object.entries(data));
+	const entries = sortDatesAsc(
+		Object.entries(data).map(([date, sessions]) => [
+			date,
+			Object.values(sessions).reduce((a, b) => a + b, 0),
+		])
+	);
 
 	let today = 0;
 	let week = 0;
