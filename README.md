@@ -1,16 +1,36 @@
-# React + Vite
+# Study Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A minimal, offline-first study timer built with React.
 
-Currently, two official plugins are available:
+Track your daily study time by category, view stats over time, and maintain a study streak — all stored locally in your browser.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Live Demo:** busrakahraman.github.io/study-tracker/
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- Study timer with pause / resume
+- Custom study sessions (coding, reading, etc.)
+- Stats by day, week, month, year
+- Current & longest study streak
+- LocalStorage persistence (no account needed)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Tech Stack
+
+- React
+- Vite
+- Recharts
+
+---
+
+## Running Locally
+
+```bash
+git clone https://github.com/BusraKahraman/study-tracker.git
+cd study-tracker
+npm install
+npm start
+```
