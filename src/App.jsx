@@ -158,7 +158,9 @@ export default function App() {
 					</div>
 				)}
 
-				{activeTab === 'stats' && <Stats data={studyData} />}
+				{activeTab === 'stats' && (
+					<Stats data={studyData} sessions={visibleSessions} />
+				)}
 
 				{activeTab === 'history' && (
 					<History
