@@ -167,7 +167,14 @@ export default function Timer({
 				Session: <strong>{sessionType || '—'}</strong>
 			</p>
 
-			<div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'center',
+					gap: '12px',
+					marginBottom: '24px',
+				}}
+			>
 				{!isRunning ? (
 					<button onClick={start}>Start</button>
 				) : (

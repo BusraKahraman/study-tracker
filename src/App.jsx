@@ -3,7 +3,7 @@ import Stats from './components/Stats';
 import History from './components/History';
 import useStudyData from './hooks/useStudyData';
 import { useEffect, useState } from 'react';
-import { getStreakInfo } from './utils/date';
+import { getStreakInfo, getTodayKey } from './utils/date';
 import useSessions from './hooks/useSessions';
 
 export default function App() {
@@ -39,8 +39,16 @@ export default function App() {
 
 	const { addSession, deleteSession, visibleSessions } = useSessions();
 
+	const todayKey = getTodayKey();
+
 	const streaks = getStreakInfo(
-		Object.entries(studyData).map(([date, sessions]) => [
+		Object.entries({
+			...studyData,
+			[todayKey]: {
+				...(studyData[todayKey] || {}),
+				__live: timerSeconds, // inject live study
+			},
+		}).map(([date, sessions]) => [
 			date,
 			Object.values(sessions).reduce((a, b) => a + b, 0),
 		])

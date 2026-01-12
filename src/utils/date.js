@@ -44,23 +44,29 @@ export function sortDatesAsc(entries = []) {
 }
 
 export function getStreakInfo(entries) {
-	if (!entries.length) {
+	if (!Array.isArray(entries) || entries.length === 0) {
 		return { current: 0, longest: 0 };
 	}
 
-	const dates = entries
-		.map(([date]) => new Date(date))
-		.map((d) => {
-			d.setHours(0, 0, 0, 0);
-			return d;
-		})
-		.sort((a, b) => a - b);
+	// keep only days with study time
+	const days = entries
+		.filter(([, seconds]) => typeof seconds === 'number' && seconds > 0)
+		.map(([date]) => date)
+		.sort(); // YYYY-MM-DD sorts naturally
 
+	if (days.length === 0) {
+		return { current: 0, longest: 0 };
+	}
+
+	// ----- longest streak -----
 	let longest = 1;
 	let temp = 1;
 
-	for (let i = 1; i < dates.length; i++) {
-		const diff = (dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24);
+	for (let i = 1; i < days.length; i++) {
+		const prev = new Date(days[i - 1]);
+		const curr = new Date(days[i]);
+
+		const diff = (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24);
 
 		if (diff === 1) {
 			temp++;
@@ -70,18 +76,18 @@ export function getStreakInfo(entries) {
 		}
 	}
 
+	// ----- current streak -----
 	let current = 0;
-	const today = new Date();
-	today.setHours(0, 0, 0, 0);
+	let cursor = getTodayKey(); // <-- string, not Date
 
-	for (let i = dates.length - 1; i >= 0; i--) {
-		const diff = (today - dates[i]) / (1000 * 60 * 60 * 24);
+	const daySet = new Set(days);
 
-		if (diff === current) {
-			current++;
-		} else {
-			break;
-		}
+	while (daySet.has(cursor)) {
+		current++;
+
+		const d = new Date(cursor);
+		d.setDate(d.getDate() - 1);
+		cursor = d.toISOString().slice(0, 10);
 	}
 
 	return { current, longest };
