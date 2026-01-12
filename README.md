@@ -4,7 +4,7 @@ A minimal, offline-first study timer built with React.
 
 Track your daily study time by category, view stats over time, and maintain a study streak — all stored locally in your browser.
 
-**Live Demo:** busrakahraman.github.io/study-tracker/
+**Live Demo:** https://busrakahraman.github.io/study-tracker/
 
 ---
 
