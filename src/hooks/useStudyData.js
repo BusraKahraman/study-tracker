@@ -1,4 +1,5 @@
 import useLocalStorage from './useLocalStorage';
+import { SYSTEM_SESSION, HIDDEN_SESSIONS } from '../constants/sessions';
 
 export default function useStudyData() {
 	const [studyData, setStudyData] = useLocalStorage('studyData', {});
@@ -11,7 +12,9 @@ export default function useStudyData() {
 	const addDay = (date, seconds, session) => {
 		if (!session || typeof seconds !== 'number') return;
 
-		addSession(session);
+		if (!HIDDEN_SESSIONS.includes(session)) {
+			addSession(session);
+		}
 
 		setStudyData((prev) => {
 			const day = prev[date] || {};
@@ -33,11 +36,34 @@ export default function useStudyData() {
 		});
 	};
 
+	const deleteSessionAndMigrate = (sessionToDelete) => {
+		if (!sessionToDelete || sessionToDelete === SYSTEM_SESSION) return;
+
+		setStudyData((prev) => {
+			const updated = {};
+
+			for (const [date, daySessions] of Object.entries(prev)) {
+				const { [sessionToDelete]: removed, ...rest } = daySessions;
+
+				if (removed) {
+					rest[SYSTEM_SESSION] = (rest[SYSTEM_SESSION] || 0) + removed;
+				}
+
+				updated[date] = rest;
+			}
+
+			return updated;
+		});
+
+		setSessions((prev) => prev.filter((s) => s !== sessionToDelete));
+	};
+
 	return {
 		studyData,
 		sessions,
 		addSession,
 		addDay,
 		deleteDay,
+		deleteSessionAndMigrate,
 	};
 }

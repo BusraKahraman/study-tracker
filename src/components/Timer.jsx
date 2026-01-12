@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { formatTime } from '../utils/time';
 import { getTodayKey } from '../utils/date';
 import StreakFooter from './StreakFooter';
+import { SYSTEM_SESSION } from '../constants/sessions';
 
 export default function Timer({
 	seconds,
@@ -48,7 +49,7 @@ export default function Timer({
 
 	const save = () => {
 		if (seconds === 0 || !sessionType) return;
-		onSave(getTodayKey(), seconds, sessionType);
+		onSave(getTodayKey(), seconds, sessionType || SYSTEM_SESSION);
 		localStorage.removeItem('startTimestamp');
 		localStorage.setItem('baseSeconds', 0);
 		reset();

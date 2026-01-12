@@ -7,7 +7,8 @@ import { getStreakInfo } from './utils/date';
 import useSessions from './hooks/useSessions';
 
 export default function App() {
-	const { studyData, addDay, editDay, deleteDay } = useStudyData();
+	const { studyData, addDay, editDay, deleteDay, deleteSessionAndMigrate } =
+		useStudyData();
 	const [activeTab, setActiveTab] = useState('timer');
 	const [timerSeconds, setTimerSeconds] = useState(() => {
 		const saved = localStorage.getItem('timerSeconds');
@@ -36,7 +37,7 @@ export default function App() {
 		);
 	});
 
-	const { sessions, addSession, deleteSession } = useSessions();
+	const { addSession, deleteSession, visibleSessions } = useSessions();
 
 	const streaks = getStreakInfo(
 		Object.entries(studyData).map(([date, sessions]) => [
@@ -44,6 +45,11 @@ export default function App() {
 			Object.values(sessions).reduce((a, b) => a + b, 0),
 		])
 	);
+
+	const handleDeleteSession = (session) => {
+		deleteSessionAndMigrate(session);
+		deleteSession(session);
+	};
 
 	useEffect(() => {
 		localStorage.setItem('timerSeconds', timerSeconds);
@@ -145,9 +151,9 @@ export default function App() {
 							setStartTimestamp={setStartTimestamp}
 							onSave={addDay}
 							streaks={streaks}
-							sessions={sessions}
+							sessions={visibleSessions}
 							onAddSession={addSession}
-							onDeleteSession={deleteSession}
+							onDeleteSession={handleDeleteSession}
 						/>
 					</div>
 				)}
