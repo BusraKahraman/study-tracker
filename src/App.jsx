@@ -146,8 +146,8 @@ export default function App() {
 							onSave={addDay}
 							streaks={streaks}
 							sessions={sessions}
-							onAdd={addSession}
-							onDelete={deleteSession}
+							onAddSession={addSession}
+							onDeleteSession={deleteSession}
 						/>
 					</div>
 				)}

@@ -15,6 +15,8 @@ export default function Timer({
 	onSave,
 	streaks,
 	sessions,
+	onAddSession,
+	onDeleteSession,
 }) {
 	const [sessionType, setSessionType] = useState(sessions[0] || '');
 	const [isAddingSession, setIsAddingSession] = useState(false);
@@ -63,6 +65,12 @@ export default function Timer({
 		return () => clearInterval(interval);
 	}, [isRunning, startTimestamp, baseSeconds]);
 
+	useEffect(() => {
+		if (!sessionType && sessions.length > 0) {
+			setSessionType(sessions[0]);
+		}
+	}, [sessions, sessionType]);
+
 	return (
 		<div
 			style={{
@@ -73,19 +81,51 @@ export default function Timer({
 		>
 			<div style={{ marginBottom: '16px' }}>
 				{!isAddingSession ? (
-					<div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-						<select
-							value={sessionType}
-							onChange={(e) => setSessionType(e.target.value)}
+					<div
+						style={{
+							display: 'flex',
+							gap: '8px',
+							marginBottom: '16px',
+							justifyContent: 'center',
+						}}
+					>
+						<div
+							style={{
+								display: 'flex',
+								gap: '8px',
+								marginBottom: '16px',
+								justifyContent: 'center',
+								flexWrap: 'wrap',
+							}}
 						>
 							{sessions.map((s) => (
-								<option key={s} value={s}>
+								<button
+									key={s}
+									onClick={() => setSessionType(s)}
+									style={{
+										padding: '6px 12px',
+										borderRadius: '999px',
+										border:
+											sessionType === s
+												? '2px solid #ececec'
+												: '1px solid #000000',
+										background: sessionType === s ? '#000000' : '#373535',
+										fontWeight: sessionType === s ? '600' : '400',
+										cursor: 'pointer',
+									}}
+								>
 									{s}
-								</option>
+								</button>
 							))}
-						</select>
 
-						<button onClick={() => setIsAddingSession(true)}>+ Add</button>
+							<button onClick={() => setIsAddingSession(true)}>+ Add</button>
+							<button
+								onClick={() => onDeleteSession(sessionType)}
+								disabled={!sessionType}
+							>
+								- Delete
+							</button>
+						</div>
 					</div>
 				) : (
 					<div style={{ display: 'flex', gap: '8px' }}>
@@ -121,6 +161,10 @@ export default function Timer({
 			>
 				{formatTime(seconds)}
 			</div>
+
+			<p style={{ textAlign: 'center', opacity: 0.7 }}>
+				Session: <strong>{sessionType || '—'}</strong>
+			</p>
 
 			<div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
 				{!isRunning ? (
