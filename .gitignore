@@ -1,4 +1,6 @@
+# ======================
 # Logs
+# ======================
 logs
 *.log
 npm-debug.log*
@@ -7,18 +9,61 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# ======================
+# Dependencies
+# ======================
+node_modules/
 
+# ======================
+# Build outputs
+# ======================
+dist/
+dist-ssr/
+dev-dist/
+build/
+
+# ======================
+# Local / env files
+# ======================
+*.local
+.env
+.env.*
+!.env.example
+
+# ======================
+# Vite / cache
+# ======================
+.vite/
+.vite-cache/
+
+# ======================
+# PWA / Service Worker (generated)
+# ======================
+sw.js
+sw.js.map
+workbox-*.js
+workbox-*.map
+
+# ======================
 # Editor directories and files
+# ======================
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# ======================
+# OS files
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# Temporary files
+# ======================
+*.tmp
+*.temp
