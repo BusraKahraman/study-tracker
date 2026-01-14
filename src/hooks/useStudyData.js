@@ -36,6 +36,17 @@ export default function useStudyData() {
 		});
 	};
 
+	const editDay = (date, seconds) => {
+		if (typeof seconds !== 'number' || seconds < 0) return;
+
+		setStudyData((prev) => ({
+			...prev,
+			[date]: {
+				manual: seconds,
+			},
+		}));
+	};
+
 	const deleteSessionAndMigrate = (sessionToDelete) => {
 		if (!sessionToDelete || sessionToDelete === SYSTEM_SESSION) return;
 
@@ -64,6 +75,7 @@ export default function useStudyData() {
 		addSession,
 		addDay,
 		deleteDay,
+		editDay,
 		deleteSessionAndMigrate,
 	};
 }
